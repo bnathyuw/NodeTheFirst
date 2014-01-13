@@ -1,80 +1,74 @@
-﻿var responseWriter = require("../../NodeTheFirst/responseWriter.js");
+﻿var nodeunit = require('nodeunit');
+var ResponseWriter = require("../../NodeTheFirst/responseWriter.js");
 
-exports.shouldWriteStatusToHead = function(test) {
-	test.expect(1);
-	var status;
-	var response = {
-		writeHead: function(s) {
-			status = s;
-		},
-		write: function() {
-		},
-		end: function() {
-		}
-	};
+var status, contentType, content, wasEnded, responseWriter;
 
-	responseWriter().writeResponse(response, 200, "blah");
+exports["write response"] = nodeunit.testCase({
+	setUp: function(callback) {
+		status = null;
+		contentType = null;
+		content = null;
+		wasEnded = false;
+		
+        this.response = {
+			writeHead: function(s, h) {
+				status = s;
+				contentType = h["Content-Type"];
+			},
+			write: function(c) {
+				content = c;
+			},
+			end: function() {
+				wasEnded = true;
+			}
+		};
 
-	test.equal(status, 200, "Status");
+		responseWriter = ResponseWriter();
 
-	test.done();
-};
-exports.shouldSetCorrectContentType = function(test) {
-	test.expect(1);
-	var contentType;
-	var response = {
-		writeHead: function(s, h) {
-			contentType = h["Content-Type"];
-		},
-		write: function() {
-		},
-		end: function() {
-		}
-	};
+		callback();
+	},
 
-	responseWriter().writeResponse(response, 200, "blah");
+	tearDown: function(callback) {
+		callback();
+	},
 
-	test.equal(contentType, "text/plain", "Content Type");
+	"should write status to head": function(test) {
+		test.expect(1);
 
-	test.done();
-};
+		responseWriter.writeResponse(this.response, 200, "blah");
 
-exports.shouldSetCorrectContent = function(test) {
-	test.expect(1);
-	var content;
-	var response = {
-		writeHead: function() {
-		},
-		write: function(c) {
-			content = c;
-		},
-		end: function() {
-		}
-	};
+		test.equal(status, 200, "Status");
 
-	responseWriter().writeResponse(response, 200, "blah");
+		test.done();
+	},
 
-	test.equal(content, "blah", "Content");
+	"should set correct content type": function(test) {
+		test.expect(1);
+	
+		responseWriter.writeResponse(this.response, 200, "blah");
 
-	test.done();
-};
+		test.equal(contentType, "text/plain", "Content Type");
 
-exports.shouldEndResponse = function(test) {
-	test.expect(1);
-	var wasEnded;
-	var response = {
-		writeHead: function() {
-		},
-		write: function() {
-		},
-		end: function() {
-			wasEnded = true;
-		}
-	};
+		test.done();
+	},
 
-	responseWriter().writeResponse(response, 200, "blah");
+	"should set correct content": function(test) {
+		test.expect(1);
 
-	test.equal(wasEnded, true, "Was ended");
+		responseWriter.writeResponse(this.response, 200, "blah");
 
-	test.done();
-};
+		test.equal(content, "blah", "Content");
+
+		test.done();
+	},
+
+	"should end response": function(test) {
+		test.expect(1);
+
+		responseWriter.writeResponse(this.response, 200, "blah");
+
+		test.equal(wasEnded, true, "Was ended");
+
+		test.done();
+	}
+});
