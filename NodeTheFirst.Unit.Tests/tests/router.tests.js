@@ -1,44 +1,50 @@
-﻿var router = require("../../NodeTheFirst/router.js");
+﻿var Router = require("../../NodeTheFirst/router.js");
+var nodeunit = require("nodeunit");
+var status, actualResponse, content, suppliedResponse;
 
-exports.shouldWriteStatus = function(test) {
-	test.expect(1);
-	var status;
+exports["route"] = nodeunit.testCase({
+	setUp: function(callback) {
+		status = null;
+		actualResponse = null;
+		content = null;
+		suppliedResponse = { a: 1 };
 
-	function writeResponse(r, s) {
-		status = s;
+		var router = Router(function(r, s, c) {
+			status = s;
+			actualResponse = r;
+			content = c;
+		});
+
+		router.route("/", suppliedResponse);
+
+		callback();
+	},
+
+	tearDown: function(callback) {
+		callback();
+	},
+
+	"should write status": function(test) {
+		test.expect(1);
+
+		test.equal(status, 200, "Status");
+
+		test.done();
+	},
+
+	"should pass through response for modification": function(test) {
+		test.expect(1);
+
+		test.equal(actualResponse, suppliedResponse, "Content");
+
+		test.done();
+	},
+
+	"should write output": function(test) {
+		test.expect(1);
+
+		test.equal(content, "Hello, world!", "Content");
+
+		test.done();
 	}
-
-	router(writeResponse).route("/", null);
-
-	test.equal(status, 200, "Status");
-	test.done();
-};
-
-exports.shouldPassThroughResponseForModification = function(test) {
-	test.expect(1);
-	var actualResponse;
-	var response = { a: 1 };
-
-	function writeResponse(r) {
-		actualResponse = r;
-	}
-
-	router(writeResponse).route("/", response);
-
-	test.equal(actualResponse, response, "Content");
-	test.done();
-};
-
-exports.shouldWriteOutput = function(test) {
-	test.expect(1);
-	var content;
-
-	function writeResponse(r, s, c) {
-		content = c;
-	}
-
-	router(writeResponse).route("/", null);
-
-	test.equal(content, "Hello, world!", "Content");
-	test.done();
-};
+});
