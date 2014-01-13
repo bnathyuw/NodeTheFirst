@@ -1,0 +1,10 @@
+{
+  "name": "NodeTheFirst",
+  "version": "0.0.0",
+  "description": "NodeTheFirst",
+  "main": "server.js",
+  "author": {
+    "name": "matthewb",
+    "email": ""
+  }
+}
