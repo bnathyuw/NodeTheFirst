@@ -1,0 +1,11 @@
+{
+  "name": "NodeTheFirst.Unit.Tests",
+  "version": "0.0.0",
+  "description": "NodeTheFirst.Unit.Tests",
+  "main": "app.js",
+  "author": {
+    "name": "matthewb",
+    "email": ""
+  },
+  "dependencies": {}
+}

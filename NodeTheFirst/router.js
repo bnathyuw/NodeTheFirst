@@ -1,6 +1,5 @@
-﻿function route(pathname, writeResponse) {
-	console.log("About to route a request for " + pathname);
-	writeResponse(200, "Hello, world!");
+﻿function route(pathname, response, writeResponse) {
+	writeResponse(response, 200, "Hello, world!");
 }
 
 exports.route = route;
