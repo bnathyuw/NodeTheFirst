@@ -1,15 +1,10 @@
-var http = require("http");
-var url = require("url");
+module.exports = function(http, port, onRequest) {
 
-function start(route, writeResponse) {
-
-	function onRequest(request, response) {
-		var pathname = url.parse(request.url).pathname;
-
-		route(pathname, response, writeResponse);
+	function start() {
+		http.createServer(onRequest).listen(port);
 	}
 
-	http.createServer(onRequest).listen(1337);
+	return {
+		start: start
+	};
 }
-
-exports.start = start;

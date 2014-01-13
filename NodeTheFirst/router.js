@@ -1,5 +1,10 @@
-﻿function route(pathname, response, writeResponse) {
-	writeResponse(response, 200, "Hello, world!");
-}
+﻿module.exports = function(writeResponse) {
 
-exports.route = route;
+	function route(pathname, response) {
+		writeResponse(response, 200, "Hello, world!");
+	}
+
+	return {
+		route: route
+	};
+}

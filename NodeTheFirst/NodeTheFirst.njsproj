@@ -30,6 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="index.js" />
+    <Compile Include="requestHandler.js" />
     <Compile Include="responseWriter.js" />
     <Compile Include="router.js" />
     <Compile Include="server.js" />

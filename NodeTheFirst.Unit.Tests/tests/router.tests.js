@@ -8,7 +8,7 @@ exports.shouldWriteStatus = function(test) {
 		status = s;
 	}
 
-	router.route("/", null, writeResponse);
+	router(writeResponse).route("/", null);
 
 	test.equal(status, 200, "Status");
 	test.done();
@@ -23,7 +23,7 @@ exports.shouldPassThroughResponseForModification = function(test) {
 		actualResponse = r;
 	}
 
-	router.route("/", response, writeResponse);
+	router(writeResponse).route("/", response);
 
 	test.equal(actualResponse, response, "Content");
 	test.done();
@@ -37,7 +37,7 @@ exports.shouldWriteOutput = function(test) {
 		content = c;
 	}
 
-	router.route("/", null, writeResponse);
+	router(writeResponse).route("/", null);
 
 	test.equal(content, "Hello, world!", "Content");
 	test.done();

@@ -4,4 +4,8 @@
 	response.end();
 }
 
-exports.writeResponse = writeResponse;
+module.exports = function() {
+	return {
+		writeResponse: writeResponse
+	};
+};

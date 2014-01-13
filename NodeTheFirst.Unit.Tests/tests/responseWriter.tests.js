@@ -13,7 +13,7 @@ exports.shouldWriteStatusToHead = function(test) {
 		}
 	};
 
-	responseWriter.writeResponse(response, 200, "blah");
+	responseWriter().writeResponse(response, 200, "blah");
 
 	test.equal(status, 200, "Status");
 
@@ -32,7 +32,7 @@ exports.shouldSetCorrectContentType = function(test) {
 		}
 	};
 
-	responseWriter.writeResponse(response, 200, "blah");
+	responseWriter().writeResponse(response, 200, "blah");
 
 	test.equal(contentType, "text/plain", "Content Type");
 
@@ -52,7 +52,7 @@ exports.shouldSetCorrectContent = function(test) {
 		}
 	};
 
-	responseWriter.writeResponse(response, 200, "blah");
+	responseWriter().writeResponse(response, 200, "blah");
 
 	test.equal(content, "blah", "Content");
 
@@ -65,14 +65,14 @@ exports.shouldEndResponse = function(test) {
 	var response = {
 		writeHead: function() {
 		},
-		write: function(c) {
+		write: function() {
 		},
 		end: function() {
 			wasEnded = true;
 		}
 	};
 
-	responseWriter.writeResponse(response, 200, "blah");
+	responseWriter().writeResponse(response, 200, "blah");
 
 	test.equal(wasEnded, true, "Was ended");
 
