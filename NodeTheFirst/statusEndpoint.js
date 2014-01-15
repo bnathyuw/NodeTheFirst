@@ -1,11 +1,7 @@
 module.exports = function() {
 
-	function handle() {
-		return {
-			statusCode: 200,
-			contentType: "text/plain",
-			content: "Status: OK"
-		};
+	function handle(response, writeResponse) {
+		writeResponse(response, 200, "Status: OK", "text/plain");
 	}
 
 	return {

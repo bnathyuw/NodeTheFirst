@@ -25,7 +25,7 @@ exports["write response"] = nodeunit.testCase({
 
 		var responseWriter = ResponseWriter();
 		
-		responseWriter.writeResponse(this.response, 200, "blah");
+		responseWriter.writeResponse(this.response, 200, "blah", "text/html");
 
 		callback();
 	},
@@ -45,7 +45,7 @@ exports["write response"] = nodeunit.testCase({
 	"should set correct content type": function(test) {
 		test.expect(1);
 	
-		test.equal(contentType, "text/plain", "Content Type");
+		test.equal(contentType, "text/html", "Content Type");
 
 		test.done();
 	},

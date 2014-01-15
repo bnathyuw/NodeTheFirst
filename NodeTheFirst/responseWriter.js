@@ -1,5 +1,5 @@
-﻿function writeResponse(response, status, content) {
-	response.writeHead(status, { "Content-Type": "text/plain" });
+﻿function writeResponse(response, status, content, contentType) {
+	response.writeHead(status, { "Content-Type": contentType });
 	response.write(content);
 	response.end();
 }
