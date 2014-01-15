@@ -1,14 +1,17 @@
 ﻿var nodeunit = require("nodeunit");
 var http = require("http");
 
-function hitStatusEndpoint(test, testResponse) {
+function hitStatusEndpoint(test, testResponse, testContent) {
 
 	function callback(response) {
-		testResponse(response);
-
-		response.on("data", function() {
+		if(testResponse) testResponse(response);
+		
+		var content = "";
+		response.on("data", function(chunk) {
+			content += chunk;
 		});
 		response.on("end", function() {
+			if (testContent) testContent(content);
 			test.done();
 		});
 	}
@@ -46,6 +49,14 @@ exports["When I hit the status endpoint"] = nodeunit.testCase({
 		hitStatusEndpoint(test, function(response) {
 			var contentType = response.headers["content-type"];
 			test.equal(contentType, "text/plain");
+		});
+	},
+
+	"then the response contains the status": function(test) {
+		test.expect(1);
+
+		hitStatusEndpoint(test, null, function(content) {
+			test.equal(content, "Status: OK");
 		});
 	}
 });
