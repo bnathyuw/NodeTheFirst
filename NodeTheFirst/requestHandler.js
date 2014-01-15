@@ -1,12 +1,12 @@
 ﻿module.exports = function(parse, route) {
 
-	function onRequest(request, response) {
+	function handleRequest(request, response) {
 		var pathname = parse(request.url).pathname;
 
 		route(pathname, response);
 	}
 
 	return {
-		onRequest: onRequest
+		handleRequest: handleRequest
 	};
 };
