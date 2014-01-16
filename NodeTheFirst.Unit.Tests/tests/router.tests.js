@@ -62,11 +62,11 @@ var nodeunit = require("nodeunit");
 			content = null;
 			suppliedResponse = { a: 1 };
 
-			var configuredEndpoint = function(response, writeResponse) {
-				writeResponse(response, 123, "Hi there", "text/gobbledigook");
+			var configuredHandler = function(write) {
+				write(123, "Hi there", "text/gobbledigook");
 			};
 
-			var routes = [{ path: "/here-i-am", handle: configuredEndpoint }];
+			var routes = [{ path: "/here-i-am", handle: configuredHandler }];
 
 			var router = Router(function(r, s, c) {
 				status = s;
