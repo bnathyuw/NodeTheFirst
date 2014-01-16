@@ -18,11 +18,9 @@
 	function route(pathname, response) {
 		var handle = findHandler(pathname);
 
-		function write(status, content, contentType) {
+		handle(function(status, content, contentType) {
 			writeResponse(response, status, content, contentType);
-		}
-
-		handle(write);
+		});
 	}
 
 	return {

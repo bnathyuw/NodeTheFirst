@@ -2,19 +2,20 @@
 var nodeunit = require("nodeunit");
 
 (function() {
-	var status, actualResponse, content, suppliedResponse;
+	var actualStatus, actualResponse, actualContent, suppliedResponse, actualContentType;
 
 	exports["when I call an unconfigured route"] = nodeunit.testCase({
 		setUp: function(callback) {
-			status = null;
-			actualResponse = null;
-			content = null;
 			suppliedResponse = { a: 1 };
-
-			var router = Router(function(r, s, c) {
-				status = s;
+			actualStatus = null;
+			actualResponse = null;
+			actualContent = null;
+			
+			var router = Router(function(r, s, c, ct) {
 				actualResponse = r;
-				content = c;
+				actualStatus = s;
+				actualContent = c;
+				actualContentType = ct;
 			});
 
 			router.route("/", suppliedResponse);
@@ -26,18 +27,18 @@ var nodeunit = require("nodeunit");
 			callback();
 		},
 
-		"should write status": function(test) {
+		"should pass through response for modification": function(test) {
 			test.expect(1);
 
-			test.equal(status, 200, "Status");
+			test.equal(actualResponse, suppliedResponse);
 
 			test.done();
 		},
 
-		"should pass through response for modification": function(test) {
+		"should write status": function(test) {
 			test.expect(1);
 
-			test.equal(actualResponse, suppliedResponse, "Content");
+			test.equal(actualStatus, 200);
 
 			test.done();
 		},
@@ -45,7 +46,15 @@ var nodeunit = require("nodeunit");
 		"should write output": function(test) {
 			test.expect(1);
 
-			test.equal(content, "Hello, world!", "Content");
+			test.equal(actualContent, "Hello, world!");
+
+			test.done();
+		},
+
+		"should write content type": function(test) {
+			test.expect(1);
+
+			test.equal(actualContentType, "text/plain");
 
 			test.done();
 		}
@@ -53,26 +62,32 @@ var nodeunit = require("nodeunit");
 })();
 
 (function() {
-	var status, actualResponse, content, suppliedResponse;
-	
+	var suppliedResponse, suppliedContentType, suppliedContent, suppliedStatus, actualStatus, actualResponse, actualContent, actualContentType;
+
 	exports["when I call a configured route"] = nodeunit.testCase({
 		setUp: function(callback) {
-			status = null;
+			suppliedStatus = 123;
+			suppliedContent = "Hi there";
+			suppliedContentType = "text/gobbledigook";
+			suppliedResponse = { a: 1 };    
+			actualStatus = null;
 			actualResponse = null;
-			content = null;
-			suppliedResponse = { a: 1 };
-
+			actualContent = null;
+			actualContentType = null;
+			
 			var configuredHandler = function(write) {
-				write(123, "Hi there", "text/gobbledigook");
+				write(suppliedStatus, suppliedContent, suppliedContentType);
 			};
 
 			var routes = [{ path: "/here-i-am", handle: configuredHandler }];
 
-			var router = Router(function(r, s, c) {
-				status = s;
+			var router = Router(function(r, s, c, ct) {
+				actualStatus = s;
 				actualResponse = r;
-				content = c;
+				actualContent = c;
+				actualContentType = ct;
 			}, routes);
+
 			router.route("/here-i-am", suppliedResponse);
 
 			callback();
@@ -82,10 +97,34 @@ var nodeunit = require("nodeunit");
 			callback();
 		},
 
+		"should pass through response for modification": function(test) {
+			test.expect(1);
+
+			test.equal(actualResponse, suppliedResponse);
+
+			test.done();
+		},
+
 		"should write status": function(test) {
 			test.expect(1);
 
-			test.equal(status, 123, "Status");
+			test.equal(actualStatus, suppliedStatus);
+
+			test.done();
+		},
+
+		"should write content": function(test) {
+			test.expect(1);
+
+			test.equal(actualContent, suppliedContent);
+
+			test.done();
+		},
+
+		"should write content type": function(test) {
+			test.expect(1);
+
+			test.equal(actualContentType, suppliedContentType);
 
 			test.done();
 		}
