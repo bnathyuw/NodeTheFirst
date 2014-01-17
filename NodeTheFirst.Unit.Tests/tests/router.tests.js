@@ -1,5 +1,5 @@
-﻿var Router = require("../../NodeTheFirst/router.js");
-var nodeunit = require("nodeunit");
+﻿var nodeunit = require("nodeunit");
+var Router = require("../../NodeTheFirst/router");
 var Stub = require("../stub");
 
 (function() {

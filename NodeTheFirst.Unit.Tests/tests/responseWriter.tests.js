@@ -1,5 +1,5 @@
 ﻿var nodeunit = require('nodeunit');
-var ResponseWriter = require("../../NodeTheFirst/responseWriter.js");
+var ResponseWriter = require("../../NodeTheFirst/responseWriter");
 var Stub = require("../stub");
 
 var response;

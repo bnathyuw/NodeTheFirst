@@ -1,21 +1,14 @@
-﻿var StatusEndpoint = require("../../NodeTheFirst/statusEndpoint.js");
-var nodeunit = require("nodeunit");
+﻿var nodeunit = require("nodeunit");
+var StatusEndpoint = require("../../NodeTheFirst/statusEndpoint");
+var Stub = require("../stub");
 
-var suppliedResponse, actualStatus, actualContent, actualContentType;
+var writeResponse;
 
 exports["when I call the status endpoint"] = nodeunit.testCase({
 	setUp: function(callback) {
 		var statusEndpoint = StatusEndpoint();
-		suppliedResponse = {};
-		actualStatus = "";
-			actualContent = "";
-			actualContentType = "";
 
-		function writeResponse(status, content, contentType) {
-			actualStatus = status;
-			actualContent = content;
-			actualContentType = contentType;
-		}
+		writeResponse = Stub();
 
 		statusEndpoint.handle(writeResponse);
 
@@ -26,26 +19,11 @@ exports["when I call the status endpoint"] = nodeunit.testCase({
 		callback();
 	},
 
-	"then I get a status of 200 ok": function(test) {
-		test.expect(1);
-		
-		test.equal(actualStatus, 200);
+	"then the response is written with the default values": function(test) {
+		test.expect(2);
 
-		test.done();
-	},
-	
-	"then I get a content type of plain text": function(test) {
-		test.expect(1);
-
-		test.equal(actualContentType, "text/plain");
-
-		test.done();
-	},
-	
-	"then I get the correct content": function(test) {
-		test.expect(1);
-
-		test.equal(actualContent, "Status: OK");
+		test.equal(writeResponse.getNumberOfCalls(), 1);
+		test.deepEqual(writeResponse.getArgumentsFromLatestCall(), [200, "Status: OK", "text/plain"]);
 
 		test.done();
 	}
