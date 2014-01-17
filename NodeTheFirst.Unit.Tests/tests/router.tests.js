@@ -62,7 +62,7 @@ var nodeunit = require("nodeunit");
 })();
 
 (function() {
-	var suppliedResponse, suppliedContentType, suppliedContent, suppliedStatus, actualStatus, actualResponse, actualContent, actualContentType;
+	var suppliedResponse, suppliedContentType, suppliedContent, suppliedStatus, actualStatus, actualResponse, actualContent, actualContentType, actualArguments;
 
 	exports["when I call a configured route"] = nodeunit.testCase({
 		setUp: function(callback) {
@@ -82,6 +82,7 @@ var nodeunit = require("nodeunit");
 			var routes = [{ path: "/here-i-am", handle: configuredHandler }];
 
 			var router = Router(function(r, s, c, ct) {
+				actualArguments = Array.prototype.slice.call(arguments);
 				actualStatus = s;
 				actualResponse = r;
 				actualContent = c;
@@ -97,34 +98,10 @@ var nodeunit = require("nodeunit");
 			callback();
 		},
 
-		"should pass through response for modification": function(test) {
+		"should call router with correct arguments": function(test) {
 			test.expect(1);
 
-			test.equal(actualResponse, suppliedResponse);
-
-			test.done();
-		},
-
-		"should write status": function(test) {
-			test.expect(1);
-
-			test.equal(actualStatus, suppliedStatus);
-
-			test.done();
-		},
-
-		"should write content": function(test) {
-			test.expect(1);
-
-			test.equal(actualContent, suppliedContent);
-
-			test.done();
-		},
-
-		"should write content type": function(test) {
-			test.expect(1);
-
-			test.equal(actualContentType, suppliedContentType);
+			test.deepEqual(actualArguments, [suppliedResponse, suppliedStatus, suppliedContent, suppliedContentType]);
 
 			test.done();
 		}
