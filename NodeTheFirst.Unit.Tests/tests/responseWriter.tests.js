@@ -1,31 +1,21 @@
 ﻿var nodeunit = require('nodeunit');
 var ResponseWriter = require("../../NodeTheFirst/responseWriter.js");
+var Stub = require("../stub");
 
-var status, contentType, content, wasEnded;
+var response;
 
 exports["write response"] = nodeunit.testCase({
 	setUp: function(callback) {
-		status = null;
-		contentType = null;
-		content = null;
-		wasEnded = false;
 		
-        this.response = {
-			writeHead: function(s, h) {
-				status = s;
-				contentType = h["Content-Type"];
-			},
-			write: function(c) {
-				content = c;
-			},
-			end: function() {
-				wasEnded = true;
-			}
+        response = {
+			writeHead: Stub(),
+			write: Stub(),
+			end: Stub()
 		};
 
 		var responseWriter = ResponseWriter();
 		
-		responseWriter.writeResponse(this.response, 200, "blah", "text/html");
+		responseWriter.writeResponse(response, 200, "blah", "text/html");
 
 		callback();
 	},
@@ -34,26 +24,20 @@ exports["write response"] = nodeunit.testCase({
 		callback();
 	},
 
-	"should write status to head": function(test) {
-		test.expect(1);
-
-		test.equal(status, 200, "Status");
-
-		test.done();
-	},
-
 	"should set correct content type": function(test) {
-		test.expect(1);
-	
-		test.equal(contentType, "text/html", "Content Type");
+		test.expect(2);
+
+		test.equal(response.writeHead.getNumberOfCalls(), 1);
+		test.deepEqual(response.writeHead.getArgumentsFromLatestCall(), [200, { "Content-Type": "text/html" }]);
 
 		test.done();
 	},
 
 	"should set correct content": function(test) {
-		test.expect(1);
+		test.expect(2);
 
-		test.equal(content, "blah", "Content");
+		test.equal(response.write.getNumberOfCalls(), 1);
+		test.deepEqual(response.write.getArgumentsFromLatestCall(), ["blah"]);
 
 		test.done();
 	},
@@ -61,7 +45,7 @@ exports["write response"] = nodeunit.testCase({
 	"should end response": function(test) {
 		test.expect(1);
 
-		test.equal(wasEnded, true, "Was ended");
+		test.equal(response.end.getNumberOfCalls(), 1);
 
 		test.done();
 	}
