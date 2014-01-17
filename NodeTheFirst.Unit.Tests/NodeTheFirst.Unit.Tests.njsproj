@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="stub.js" />
     <Compile Include="tests\requestHandler.tests.js" />
     <Compile Include="tests\responseWriter.tests.js" />
     <Compile Include="tests\statusEndpoint.tests.js" />

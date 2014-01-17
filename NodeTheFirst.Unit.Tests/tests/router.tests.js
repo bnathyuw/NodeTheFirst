@@ -1,22 +1,17 @@
 ﻿var Router = require("../../NodeTheFirst/router.js");
 var nodeunit = require("nodeunit");
+var Stub = require("../stub");
 
 (function() {
-	var actualStatus, actualResponse, actualContent, suppliedResponse, actualContentType;
+	var suppliedResponse, writeContent;
 
 	exports["when I call an unconfigured route"] = nodeunit.testCase({
 		setUp: function(callback) {
 			suppliedResponse = { a: 1 };
-			actualStatus = null;
-			actualResponse = null;
-			actualContent = null;
-			
-			var router = Router(function(r, s, c, ct) {
-				actualResponse = r;
-				actualStatus = s;
-				actualContent = c;
-				actualContentType = ct;
-			});
+
+			writeContent = Stub();
+
+			var router = Router(writeContent);
 
 			router.route("/", suppliedResponse);
 
@@ -27,34 +22,11 @@ var nodeunit = require("nodeunit");
 			callback();
 		},
 
-		"should pass through response for modification": function(test) {
-			test.expect(1);
+		"should write content correctly": function(test) {
+			test.expect(2);
 
-			test.equal(actualResponse, suppliedResponse);
-
-			test.done();
-		},
-
-		"should write status": function(test) {
-			test.expect(1);
-
-			test.equal(actualStatus, 200);
-
-			test.done();
-		},
-
-		"should write output": function(test) {
-			test.expect(1);
-
-			test.equal(actualContent, "Hello, world!");
-
-			test.done();
-		},
-
-		"should write content type": function(test) {
-			test.expect(1);
-
-			test.equal(actualContentType, "text/plain");
+			test.equal(writeContent.getNumberOfCalls(), 1);
+			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, 200, "Hello, world!", "text/plain"]);
 
 			test.done();
 		}
@@ -62,18 +34,14 @@ var nodeunit = require("nodeunit");
 })();
 
 (function() {
-	var suppliedResponse, suppliedContentType, suppliedContent, suppliedStatus, actualStatus, actualResponse, actualContent, actualContentType, actualArguments;
+	var suppliedResponse, suppliedContentType, suppliedContent, suppliedStatus, writeContent;
 
 	exports["when I call a configured route"] = nodeunit.testCase({
 		setUp: function(callback) {
+			suppliedResponse = { a: 1 };
 			suppliedStatus = 123;
 			suppliedContent = "Hi there";
 			suppliedContentType = "text/gobbledigook";
-			suppliedResponse = { a: 1 };    
-			actualStatus = null;
-			actualResponse = null;
-			actualContent = null;
-			actualContentType = null;
 			
 			var configuredHandler = function(write) {
 				write(suppliedStatus, suppliedContent, suppliedContentType);
@@ -81,13 +49,9 @@ var nodeunit = require("nodeunit");
 
 			var routes = [{ path: "/here-i-am", handle: configuredHandler }];
 
-			var router = Router(function(r, s, c, ct) {
-				actualArguments = Array.prototype.slice.call(arguments);
-				actualStatus = s;
-				actualResponse = r;
-				actualContent = c;
-				actualContentType = ct;
-			}, routes);
+			writeContent = Stub();
+			
+			var router = Router(writeContent, routes);
 
 			router.route("/here-i-am", suppliedResponse);
 
@@ -98,10 +62,11 @@ var nodeunit = require("nodeunit");
 			callback();
 		},
 
-		"should call router with correct arguments": function(test) {
-			test.expect(1);
+		"should write content correctly": function(test) {
+			test.expect(2);
 
-			test.deepEqual(actualArguments, [suppliedResponse, suppliedStatus, suppliedContent, suppliedContentType]);
+			test.equal(writeContent.getNumberOfCalls(), 1);
+			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, suppliedStatus, suppliedContent, suppliedContentType]);
 
 			test.done();
 		}
