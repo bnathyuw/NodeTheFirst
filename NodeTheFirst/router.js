@@ -2,7 +2,7 @@
 	routes = routes || [];
 
 	function handleUnroutedRequest(write) {
-		write({ statusCode: 200, content: "Hello, world!", contentType: "text/plain" });
+		write({ statusCode: 404, content: "Page not found", contentType: "text/plain" });
 	}
 
 	function findHandler(requestDetails) {

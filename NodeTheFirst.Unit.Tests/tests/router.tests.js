@@ -26,7 +26,7 @@ var Stub = require("../stub");
 			test.expect(2);
 
 			test.equal(writeContent.getNumberOfCalls(), 1);
-			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, { statusCode: 200, content: "Hello, world!", contentType: "text/plain" }]);
+			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, { statusCode: 404, content: "Page not found", contentType: "text/plain" }]);
 
 			test.done();
 		}
