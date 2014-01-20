@@ -1,33 +1,16 @@
 ﻿var nodeunit = require("nodeunit");
 var http = require("http");
+var Request = require("../request");
 
-var options = {
-	host: "localhost",
-	port: "1337",
-	path: "/unknown-endpoint"
-};
-
-function hitEndpoint(testResponse) {
-
-	function callback(response) {
-		var content = "";
-		response.on("data", function(chunk) {
-			content += chunk;
-		});
-		response.on("end", function() {
-			if (testResponse) testResponse({
-				statusCode: response.statusCode,
-				headers: response.headers,
-				content: content
-			});
-		});
-	}
-
-	http.request(options, callback).end();
-}
+var request;
 
 exports["When I hit an unknown endpoint"] = nodeunit.testCase({
 	setUp: function(callback) {
+		request = Request({
+			host: "localhost",
+			port: "1337",
+			path: "/unknown-endpoint"
+		});
 		callback();
 	},
 
@@ -38,7 +21,7 @@ exports["When I hit an unknown endpoint"] = nodeunit.testCase({
 	"then I get a 404 status code": function(test) {
 		test.expect(1);
 
-		hitEndpoint(function(response) {
+		request.getResponse(function(response) {
 			var statusCode = response.statusCode;
 			test.equal(statusCode, 404);
 			test.done();
@@ -48,7 +31,7 @@ exports["When I hit an unknown endpoint"] = nodeunit.testCase({
 	"then the response is encoded as plain text": function(test) {
 		test.expect(1);
 
-		hitEndpoint(function(response) {
+		request.getResponse(function(response) {
 			var contentType = response.headers["content-type"];
 			test.equal(contentType, "text/plain");
 			test.done();
@@ -58,7 +41,7 @@ exports["When I hit an unknown endpoint"] = nodeunit.testCase({
 	"then the response tells me the page wasn't found": function(test) {
 		test.expect(1);
 
-		hitEndpoint(function(response) {
+		request.getResponse(function(response) {
 			test.equal(response.content, "Page not found");
 			test.done();
 		});

@@ -1,32 +1,16 @@
 ﻿var nodeunit = require("nodeunit");
 var http = require("http");
+var Request = require("../request");
 
-var options = {
-	host: "localhost",
-	port: "1337",
-	path: "/status"
-};
-
-function hitStatusEndpoint(testResponse) {
-	function callback(response) {
-		var content = "";
-		response.on("data", function(chunk) {
-			content += chunk;
-		});
-		response.on("end", function() {
-			if (testResponse) testResponse({
-				statusCode: response.statusCode,
-				headers: response.headers,
-				content: content
-			});
-		});
-	}
-
-	http.request(options, callback).end();
-}
+var request;
 
 exports["When I hit the status endpoint"] = nodeunit.testCase({
 	setUp: function(callback) {
+		request = Request({
+			host: "localhost",
+			port: "1337",
+			path: "/status"
+		});
 		callback();
 	},
 
@@ -37,7 +21,7 @@ exports["When I hit the status endpoint"] = nodeunit.testCase({
 	"then I get a 200 status code": function(test) {
 		test.expect(1);
 
-		hitStatusEndpoint(function(response) {
+		request.getResponse(function(response) {
 			var statusCode = response.statusCode;
 			test.equal(statusCode, 200);
 			test.done();
@@ -47,7 +31,7 @@ exports["When I hit the status endpoint"] = nodeunit.testCase({
 	"then the response is encoded as plain text": function(test) {
 		test.expect(1);
 
-		hitStatusEndpoint(function(response) {
+		request.getResponse(function(response) {
 			var contentType = response.headers["content-type"];
 			test.equal(contentType, "text/plain");
 			test.done();
@@ -57,7 +41,7 @@ exports["When I hit the status endpoint"] = nodeunit.testCase({
 	"then the response contains the status": function(test) {
 		test.expect(1);
 
-		hitStatusEndpoint(function(response) {
+		request.getResponse(function(response) {
 			test.equal(response.content, "Status: OK");
 			test.done();
 		});
