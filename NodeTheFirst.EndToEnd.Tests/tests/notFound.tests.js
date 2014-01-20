@@ -1,5 +1,4 @@
 ﻿var nodeunit = require("nodeunit");
-var http = require("http");
 var Request = require("../request");
 
 var request;
