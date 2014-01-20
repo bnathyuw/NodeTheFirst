@@ -1,6 +1,6 @@
-﻿function writeResponse(response, status, content, contentType) {
-	response.writeHead(status, { "Content-Type": contentType });
-	response.write(content);
+﻿function writeResponse(response, responseDetails) {
+	response.writeHead(responseDetails.statusCode, { "Content-Type": responseDetails.contentType });
+	response.write(responseDetails.content);
 	response.end();
 }
 

@@ -1,8 +1,8 @@
 ﻿module.exports = function(writeResponse, routes) {
-    routes = routes || [];
+	routes = routes || [];
 
 	function defaultHandler(write) {
-		write(200, "Hello, world!", "text/plain");
+		write({ statusCode: 200, content: "Hello, world!", contentType: "text/plain" });
 	}
 
 	function findHandler(pathname) {
@@ -18,8 +18,8 @@
 	function route(pathname, response) {
 		var handle = findHandler(pathname);
 
-		handle(function(status, content, contentType) {
-			writeResponse(response, status, content, contentType);
+		handle(function(responseDetails) {
+			writeResponse(response, responseDetails);
 		});
 	}
 

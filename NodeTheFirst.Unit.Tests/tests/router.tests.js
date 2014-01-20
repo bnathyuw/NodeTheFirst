@@ -26,7 +26,7 @@ var Stub = require("../stub");
 			test.expect(2);
 
 			test.equal(writeContent.getNumberOfCalls(), 1);
-			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, 200, "Hello, world!", "text/plain"]);
+			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, { statusCode: 200, content: "Hello, world!", contentType: "text/plain" }]);
 
 			test.done();
 		}
@@ -44,7 +44,7 @@ var Stub = require("../stub");
 			suppliedContentType = "text/gobbledigook";
 			
 			var configuredHandler = function(write) {
-				write(suppliedStatus, suppliedContent, suppliedContentType);
+				write({ statusCode: suppliedStatus, content: suppliedContent, contentType: suppliedContentType });
 			};
 
 			var routes = [{ path: "/here-i-am", handle: configuredHandler }];
@@ -66,7 +66,7 @@ var Stub = require("../stub");
 			test.expect(2);
 
 			test.equal(writeContent.getNumberOfCalls(), 1);
-			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, suppliedStatus, suppliedContent, suppliedContentType]);
+			test.deepEqual(writeContent.getArgumentsFromLatestCall(), [suppliedResponse, { statusCode: suppliedStatus, content: suppliedContent, contentType: suppliedContentType }]);
 
 			test.done();
 		}

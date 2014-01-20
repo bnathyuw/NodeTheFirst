@@ -15,7 +15,7 @@ exports["write response"] = nodeunit.testCase({
 
 		var responseWriter = ResponseWriter();
 		
-		responseWriter.writeResponse(response, 200, "blah", "text/html");
+		responseWriter.writeResponse(response, { statusCode: 200, content: "blah", contentType: "text/html" });
 
 		callback();
 	},

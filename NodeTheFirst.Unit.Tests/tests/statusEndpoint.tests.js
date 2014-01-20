@@ -23,7 +23,7 @@ exports["when I call the status endpoint"] = nodeunit.testCase({
 		test.expect(2);
 
 		test.equal(writeResponse.getNumberOfCalls(), 1);
-		test.deepEqual(writeResponse.getArgumentsFromLatestCall(), [200, "Status: OK", "text/plain"]);
+		test.deepEqual(writeResponse.getArgumentsFromLatestCall(), [{ statusCode: 200, content: "Status: OK", contentType: "text/plain" }]);
 
 		test.done();
 	}
