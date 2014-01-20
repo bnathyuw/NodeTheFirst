@@ -6,13 +6,11 @@
 	}
 
 	function findHandler(pathname) {
-		for (var i = 0; i < routes.length; i++) {
-			var r = routes[i];
-			if (r.path == pathname) {
-				return r.handle;
-			}
-		}
-		return defaultHandler;
+		return routes.filter(function(rt) {
+			return rt.path == pathname;
+		}).map(function(rt) {
+			return rt.handle;
+		})[0] || defaultHandler;
 	}
 
 	function route(pathname, response) {
