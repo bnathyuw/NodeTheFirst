@@ -41,7 +41,7 @@ exports["on request"] = nodeunit.testCase({
 		test.expect(2);
 
 		test.equal(route.getNumberOfCalls(), 1);
-		test.deepEqual(route.getArgumentsFromLatestCall(), [pathname, suppliedResponse]);
+		test.deepEqual(route.getArgumentsFromLatestCall(), [{ pathname: pathname }, suppliedResponse]);
 
 		test.done();
 	}

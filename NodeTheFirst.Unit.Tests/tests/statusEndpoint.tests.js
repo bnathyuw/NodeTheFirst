@@ -4,6 +4,20 @@ var Stub = require("../stub");
 
 var writeResponse;
 
+exports["when asked if it can handle calls to the status url"] = nodeunit.testCase({
+		"then it replies true": function(test) {
+			test.expect(1);
+
+			var statusEndpoint = StatusEndpoint();
+
+			var result = statusEndpoint.canHandle({ pathname: "/status" });
+
+			test.ok(result);
+
+			test.done();
+		}
+});
+
 exports["when I call the status endpoint"] = nodeunit.testCase({
 	setUp: function(callback) {
 		var statusEndpoint = StatusEndpoint();

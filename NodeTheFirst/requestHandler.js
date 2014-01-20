@@ -3,7 +3,7 @@
 	function handleRequest(request, response) {
 		var pathname = parse(request.url).pathname;
 
-		route(pathname, response);
+		route({ pathname: pathname }, response);
 	}
 
 	return {

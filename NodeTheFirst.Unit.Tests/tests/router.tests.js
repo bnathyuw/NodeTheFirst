@@ -47,7 +47,7 @@ var Stub = require("../stub");
 				write({ statusCode: suppliedStatus, content: suppliedContent, contentType: suppliedContentType });
 			};
 
-			var routes = [{ path: "/here-i-am", handle: configuredHandler }];
+			var routes = [{ canHandle: function () { return true; }, handle: configuredHandler }];
 
 			writeContent = Stub();
 			
