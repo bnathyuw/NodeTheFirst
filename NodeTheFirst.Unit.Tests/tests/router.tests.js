@@ -13,7 +13,7 @@ var Stub = require("../stub");
 
 			var router = Router(writeContent);
 
-			router.route("/", suppliedResponse);
+			router.route({ pathname: "/" }, suppliedResponse);
 
 			callback();
 		},
@@ -53,7 +53,7 @@ var Stub = require("../stub");
 			
 			var router = Router(writeContent, routes);
 
-			router.route("/here-i-am", suppliedResponse);
+			router.route({ pathname: "/here-i-am" }, suppliedResponse);
 
 			callback();
 		},
