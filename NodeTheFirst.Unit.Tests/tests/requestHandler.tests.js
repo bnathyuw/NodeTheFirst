@@ -11,8 +11,9 @@ exports["on request"] = nodeunit.testCase({
 		suppliedResponse = { b: 2 };
 
 		parse = Stub(function(url) {
-			if (url === "abc") return { pathname: pathname };
-			return "";
+			return {
+				pathname: url === "abc" ? pathname : ""
+			};
 		});
 
 		route = Stub();
