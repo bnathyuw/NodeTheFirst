@@ -33,6 +33,7 @@
     <Compile Include="stub.js" />
     <Compile Include="tests\requestHandler.tests.js" />
     <Compile Include="tests\responseWriter.tests.js" />
+    <Compile Include="tests\kittenEndpoint.tests.js" />
     <Compile Include="tests\statusEndpoint.tests.js" />
     <Compile Include="tests\router.tests.js" />
     <Content Include="package.json" />

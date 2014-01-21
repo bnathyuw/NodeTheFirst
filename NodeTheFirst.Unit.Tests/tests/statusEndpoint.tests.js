@@ -24,7 +24,7 @@ exports["when I call the status endpoint"] = nodeunit.testCase({
 
 		writeResponse = Stub();
 
-		statusEndpoint.handle(writeResponse);
+		statusEndpoint.handle({}, writeResponse);
 
 		callback();
 	},

@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="request.js" />
+    <Compile Include="tests\getResource.tests.js" />
     <Compile Include="tests\notFound.tests.js" />
     <Compile Include="tests\status.tests.js" />
   </ItemGroup>

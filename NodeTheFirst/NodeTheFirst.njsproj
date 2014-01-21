@@ -39,6 +39,7 @@
     <Compile Include="requestHandler.js" />
     <Compile Include="responseWriter.js" />
     <Compile Include="router.js" />
+    <Compile Include="kittenEndpoint.js" />
     <Compile Include="statusEndpoint.js" />
     <Compile Include="server.js" />
     <Content Include="package.json" />

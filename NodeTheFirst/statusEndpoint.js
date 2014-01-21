@@ -4,7 +4,7 @@ module.exports = function() {
 		return requestDetails.pathname === "/status";
 	}
 
-	function handle(writeResponse) {
+	function handle(requestDetails, writeResponse) {
 		writeResponse({ statusCode: 200, content: "Status: OK", contentType: "text/plain" });
 	}
 

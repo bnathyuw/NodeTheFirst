@@ -2,12 +2,13 @@
 var RequestHandler = require("../../NodeTheFirst/requestHandler");
 var Stub = require("../stub");
 
-var actualPathname, actualResponse, pathname, suppliedRequest, suppliedResponse, requestHandler, route, parse;
+var actualPathname, actualResponse, pathname, suppliedRequest, suppliedHeaders, suppliedResponse, requestHandler, route, parse;
 
 exports["on request"] = nodeunit.testCase({
 	setUp: function(callback) {
 		pathname = "def";
-		suppliedRequest = { url: "abc" };
+		suppliedHeaders = { "foo": "bar" };
+		suppliedRequest = { url: "abc", headers: suppliedHeaders };
 		suppliedResponse = { b: 2 };
 
 		parse = Stub(function(url) {
@@ -42,7 +43,7 @@ exports["on request"] = nodeunit.testCase({
 		test.expect(2);
 
 		test.equal(route.getNumberOfCalls(), 1);
-		test.deepEqual(route.getArgumentsFromLatestCall(), [{ pathname: pathname }, suppliedResponse]);
+		test.deepEqual(route.getArgumentsFromLatestCall(), [{ pathname: pathname, headers: suppliedHeaders }, suppliedResponse]);
 
 		test.done();
 	}

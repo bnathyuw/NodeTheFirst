@@ -43,7 +43,7 @@ var Stub = require("../stub");
 			suppliedContent = "Hi there";
 			suppliedContentType = "text/gobbledigook";
 			
-			var configuredHandler = function(write) {
+			var configuredHandler = function(requestDetails, write) {
 				write({ statusCode: suppliedStatus, content: suppliedContent, contentType: suppliedContentType });
 			};
 

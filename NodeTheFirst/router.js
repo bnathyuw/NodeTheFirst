@@ -1,7 +1,7 @@
 ﻿module.exports = function(writeResponse, routes) {
 	routes = routes || [];
 
-	function handleUnroutedRequest(write) {
+	function handleUnroutedRequest(requestDetails, write) {
 		write({ statusCode: 404, content: "Page not found", contentType: "text/plain" });
 	}
 
@@ -16,7 +16,7 @@
 	function route(requestDetails, response) {
 		var handle = findHandler(requestDetails);
 
-		handle(function(responseDetails) {
+		handle(requestDetails, function(responseDetails) {
 			writeResponse(response, responseDetails);
 		});
 	}
