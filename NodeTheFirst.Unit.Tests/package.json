@@ -8,6 +8,7 @@
     "email": ""
   },
   "dependencies": {
-    "nodeunit": "~0.8.2"
+    "nodeunit": "~0.8.2",
+    "xml2js": "~0.4.1"
   }
 }

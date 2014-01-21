@@ -1,6 +1,7 @@
 ﻿var nodeunit = require("nodeunit");
 var KittenEndpoint = require("../../NodeTheFirst/kittenEndpoint");
 var Stub = require("../stub");
+var xml2js = require("xml2js");
 
 var writeResponse;
 
@@ -30,7 +31,7 @@ exports["When asked it if can handle calls to the kitten endpoint"] = nodeunit.t
 });
 
 exports["When we request a json response"] = nodeunit.testCase({
-	"then we get a json response": function(test) {
+	"then the content type is json": function(test) {
 		test.expect(1);
 
 		var kittenEndpoint = KittenEndpoint();
@@ -41,11 +42,25 @@ exports["When we request a json response"] = nodeunit.testCase({
 		test.equal(writeResponse.getArgumentsFromLatestCall()[0].contentType, "application/json");
 
 		test.done();
-	}
+	},
+	
+    "then the response is encoded as json":function(test) {
+		test.expect(1);
+
+		var kittenEndpoint = KittenEndpoint();
+		writeResponse = Stub();
+
+		kittenEndpoint.handle({headers: { "accept": "application/json" } }, writeResponse);
+	    var content = writeResponse.getArgumentsFromLatestCall()[0].content;
+	    var parsedContent = JSON.parse(content);
+	    test.deepEqual(parsedContent, {name:"Fluffles", favouriteThing:"balls of wool"});
+
+		test.done();    
+    }
 });
 
 exports["When we request an xml response"] = nodeunit.testCase({
-	"then we get a json response": function(test) {
+	"then the content type is xml": function(test) {
 		test.expect(1);
 
 		var kittenEndpoint = KittenEndpoint();
@@ -56,30 +71,21 @@ exports["When we request an xml response"] = nodeunit.testCase({
 		test.equal(writeResponse.getArgumentsFromLatestCall()[0].contentType, "application/xml");
 
 		test.done();
+	},
+	
+    "then the response is encoded as xml": function(test) {
+		test.expect(1);
+
+		var kittenEndpoint = KittenEndpoint();
+		writeResponse = Stub();
+
+		kittenEndpoint.handle({headers: { "accept": "application/xml" } }, writeResponse);
+	    var content = writeResponse.getArgumentsFromLatestCall()[0].content;
+	    test.doesNotThrow(function() {
+		    xml2js.parseString(content, function(err, result) {
+			    test.deepEqual(result, { kitten: { name: ["Fluffles"], favouriteThing: ["balls of wool"] } });
+			    test.done();
+		    });
+	    });
 	}
 });
-
-//exports["when I call the status endpoint"] = nodeunit.testCase({
-//	setUp: function(callback) {
-//		var statusEndpoint = StatusEndpoint();
-
-//		writeResponse = Stub();
-
-//		statusEndpoint.handle(writeResponse);
-
-//		callback();
-//	},
-
-//	tearDown: function(callback) {
-//		callback();
-//	},
-
-//	"then the response is written with the default values": function(test) {
-//		test.expect(2);
-
-//		test.equal(writeResponse.getNumberOfCalls(), 1);
-//		test.deepEqual(writeResponse.getArgumentsFromLatestCall(), [{ statusCode: 200, content: "Status: OK", contentType: "text/plain" }]);
-
-//		test.done();
-//	}
-//});
